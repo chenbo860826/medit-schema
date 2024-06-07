@@ -1,0 +1,86 @@
+body, table, td, th {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+}
+body{
+    padding: 0px;
+    margin: 0px;
+}
+#banner {
+    flex: 0 0 50px; 
+    align-items: center; 
+    display: flex;
+}
+#banner::after {
+    height: 4px;
+    position: absolute;
+    top: 50px;
+    right: 0px;
+    left: 0px;
+    background: linear-gradient(rgba(9, 30, 66, 0.13) 0px, rgba(9, 30, 66, 0.13) 1px, rgba(9, 30, 66, 0.08) 1px, rgba(9, 30, 66, 0) 4px);
+    content: "";
+}
+#projectName{
+    float: left;
+    font-weight: bold;
+    font-size: 16px;
+    margin-left: 10px;
+}
+#buttonZone button{
+    margin-right: 10px;
+}
+.blueButton {
+    background-color: #0052CC;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    border-radius: 3px;
+    padding: 8px 10px 8px 10px;
+}
+.button_h1h {
+    background-color: #0052CC;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    border-radius: 3px;
+    padding: 8px 10px 8px 10px;
+    cursor: hand;
+}
+.button_h1h[disabled] {
+    background-color: #CCCCCC;
+}
+.button_h1 {
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    border-radius: 3px;
+    padding: 8px 10px 8px 10px;
+    cursor: hand;
+}
+.button_h1[disabled] {
+}
+.button_h2h {
+    background-color: #0052CC;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    border-radius: 3px;
+    padding: 4px 10px 4px 10px;
+    margin-right: 5px;
+    cursor: hand;
+}
+.button_h2h[disabled] {
+    background-color: gray;
+}
+.button_h2 {
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    border-radius: 3px;
+    padding: 4px 10px 4px 10px;
+    margin-right: 5px;
+    cursor: hand;
+}

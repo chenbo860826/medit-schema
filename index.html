@@ -1,0 +1,42 @@
+<link rel="stylesheet" type="text/css" href="./converter.css">
+<link rel="icon" href="./logo.ico" type="image/x-icon">
+<style>
+    .panel {
+        border: 1px solid gray;
+        margin: 5px;
+        padding: 5px;
+    }
+</style>
+
+<script src="./jquery/jquery-3.6.0.min.js"></script>
+<script src="./lib/lodash.min.js"></script>
+<script src="./lib/jelem-1.0.2.min.js"></script>
+<script src="./lib/peg.js"></script>
+
+<body>
+    <div style="display:flex; flex-direction: row; height:100%">
+        <div style="flex: 1 1; overflow:auto" id="inputPanel" class="panel" contenteditable="plaintext-only"></div>
+        <div style="flex: 1 1; overflow:auto; white-space: pre-wrap; word-break: break-word;" id="outputPanel" class="panel"></div>
+    </div>
+</body>
+
+<script type="module">
+    import { parser } from './meditschema.js';
+
+    $('#inputPanel').on('input', function(event) {
+        compare();
+    });
+
+    function compare() {
+        var input = $('#inputPanel').text();
+        
+        try{
+            var output = parser.parse(input);
+            $('#outputPanel').text(JSON.stringify(output, null, 4)).css('color', '');
+        }
+        catch(e) {
+            $('#outputPanel').text(e).css('color', 'red');
+        }
+        
+    }
+</script>
