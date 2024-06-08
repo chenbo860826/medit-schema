@@ -2,9 +2,36 @@
 <link rel="icon" href="./logo.ico" type="image/x-icon">
 <style>
     .panel {
-        border: 1px solid gray;
         margin: 5px;
+        flex: 1 1;
+        display: flex;
+        flex-direction: column;
+    }
+    .zoneHeader {
+        flex: 0 0 20px;
+        text-align: center;
+        font-weight: bold;
+        background-color: gray;
+        color: white;
+        line-height: 20px;
+    }
+    .zone {
+        flex: 1 1;
+        overflow:auto;
+        white-space: pre-wrap;
+        word-break: break-word;
         padding: 5px;
+        background-color: #EEEEEE;
+    }
+    .editableZone{
+        flex: 1 1;
+        overflow:auto;
+        white-space: pre-wrap;
+        word-break: break-word;
+        padding: 5px;
+        margin-top: 5px;
+        border: 1px solid gray;
+        border-radius: 3px;
     }
 </style>
 
@@ -15,28 +42,61 @@
 
 <body>
     <div style="display:flex; flex-direction: row; height:100%">
-        <div style="flex: 1 1; overflow:auto" id="inputPanel" class="panel" contenteditable="plaintext-only"></div>
-        <div style="flex: 1 1; overflow:auto; white-space: pre-wrap; word-break: break-word;" id="outputPanel" class="panel"></div>
+        <div class="panel" style="flex: 3 3">
+            <div class="zoneHeader">Document</div>
+            <div id="documentPanel" class="editableZone" contenteditable="plaintext-only"></div>
+        </div>
+        <div class="panel" style="flex: 2 2">
+            <div class="zoneHeader">Schema</div>
+            <div id="schemaPanel" class="editableZone" contenteditable="plaintext-only"></div>
+        </div>
+        <div class="panel" style="flex: 2 2">
+            <div class="zoneHeader">Parsed Schema</div>
+            <div id="parsedSchemaPanel" class="zone"></div>
+        </div>
+        <div class="panel" style="flex: 3 3">
+            <div class="zoneHeader">Rendered Document</div>
+            <div id="renderedDocumentPanel" class="zone"></div>
+        </div>
     </div>
 </body>
 
 <script type="module">
     import { parser } from './meditschema.js';
+    import { getAllEntities, deleteEntity, showPopup, MenuItem, renderField, makeModel, registerType, SlideBar, renderContents } from "./lib/medit.js";
 
-    $('#inputPanel').on('input', function(event) {
-        compare();
-    });
+    // register on change handler
+    $('#schemaPanel').on('input', parseAndRender);
+    $('#documentPanel').on('input', parseAndRender);
 
-    function compare() {
-        var input = $('#inputPanel').text();
-        
+    // handle the change and render
+    function parseAndRender() {
+        let parsedSchema;
+
+        // try get parsed schema
         try{
-            var output = parser.parse(input);
-            $('#outputPanel').text(JSON.stringify(output, null, 4)).css('color', '');
+            let schema = $('#schemaPanel').text();
+            parsedSchema = schema && parser.parse(schema);
+            $('#parsedSchemaPanel')
+                .text(parsedSchema ? JSON.stringify(parsedSchema, null, 4) : '')
+                .css('color', '');
         }
         catch(e) {
-            $('#outputPanel').text(e).css('color', 'red');
+            $('#parsedSchemaPanel').text(e).css('color', 'red');
         }
-        
+
+        // try show rendered document
+        try {
+            let content = $('#documentPanel').text().trim();
+            let parsedDocument = content && eval('(' + content + ')')
+            $('#renderedDocumentPanel')
+                .text('')
+                .css('color', '')
+                .append(parsedDocument && parsedSchema && renderField(makeModel(parsedSchema, parsedDocument, {storage: 'ram'}), null, { writable: true }));
+        }
+        catch(e) {
+            $('#renderedDocumentPanel').text(e).css('color', 'red');
+        }
     }
+    
 </script>
